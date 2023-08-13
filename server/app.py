@@ -1,22 +1,21 @@
 
 import requests
 from PIL import Image
-from torchvision import transforms
-
-# Download human-readable labels for ImageNet.
-response = requests.get("https://git.io/JJkYN")
-labels = response.text.split("\n")
-
-def predict(inp):
-  inp = transforms.ToTensor()(inp).unsqueeze(0)
-  with torch.no_grad():
-    prediction = torch.nn.functional.softmax(model(inp)[0], dim=0)
-    confidences = {labels[i]: float(prediction[i]) for i in range(1000)}
-  return confidences
-
 import gradio as gr
+
+from modules.room_layout_transfomer import Pano2FloorPlan
+
+room = Pano2FloorPlan()
+
+output_dir= 'storage/results'
+
+def predict(image_pil):
+    image_path = 'image'
+    img_floor_plan= room.process(img_pil=image_pil, image_path=image_path, save_dir=output_dir)
+    return img_floor_plan
+
 
 gr.Interface(fn=predict,
              inputs=gr.Image(type="pil"),
-             outputs=gr.Label(num_top_classes=3),
-             examples=["lion.jpg", "cheetah.jpg"]).launch()
+             outputs=['image'],
+             examples=["storage/asserts/floor_01_partial_room_01_pano_15.jpg", "storage/asserts/floor_01_partial_room_07_pano_19.jpg"]).launch()
