@@ -1,0 +1,1 @@
+FLOOR_DOOR_Z = -1.6

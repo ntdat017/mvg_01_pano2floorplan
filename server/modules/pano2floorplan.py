@@ -6,12 +6,13 @@ from .door_detector import DoorDetector
 
 from .utils import np_coorx2u, np_coor2xy, project_point_on_line, intersection_point_on_line, get_session_name, PI
 from .plot import plot_floor_plan
-
+from .bird_view import export_bird_view
+from .config import FLOOR_DOOR_Z
 
 
 class Pano2FloorPlan():
     def __init__(self):
-        self.door_detector = DoorDetector()
+        # self.door_detector = DoorDetector()
         self.horizonnet_wrapper = HorizonNetWrapper()
 
     def process(self, image_path, save_dir='', img_pil=None):
@@ -26,28 +27,29 @@ class Pano2FloorPlan():
         corner_coords, _, _ = self.horizonnet_wrapper.inference(img_preprocessed_pil, vis_name, is_vis=True)
 
         # door_coords: (top, left, bottom, right)
-        door_coords, door_classes = self.door_detector.detect(img_preprocessed_pil, vis_name, is_vis=True)
+        # door_coords, door_classes = self.door_detector.detect(img_preprocessed_pil, vis_name, is_vis=True)
 
         W, H = img_preprocessed_pil.size
 
-        corner_xy, door_xy = self.transform_coord2xy(corner_coords, door_coords, W, H)
+        corner_xy = np_coor2xy(corner_coords, FLOOR_DOOR_Z, W, H, floorW=1, floorH=1)
+        # door_xy = self.door_coord2xy(corner_coords, door_coords, W, H)
 
-        ax = plot_floor_plan(corner_xy, door_xy, door_classes)
+        ax = plot_floor_plan(corner_xy)
         ax.figure.savefig(f'{save_dir}/{vis_name}.floorplan.png')
 
         img_floor_plan = Image.frombytes('RGB', ax.figure.canvas.get_width_height(), ax.figure.canvas.tostring_rgb())
-        return img_floor_plan
+
+        img_bird_view = export_bird_view(img_preprocessed_pil)
+        return img_floor_plan, img_bird_view
 
 
-    def transform_coord2xy(self, corner_coords, door_coords, W, H):
-        floor_door_z = -1.6
-
-        corner_xy = np_coor2xy(corner_coords, floor_door_z, W, H, floorW=1, floorH=1)
+    def door_coord2xy(self, corner_coords, door_coords, W, H):
+        corner_xy = np_coor2xy(corner_coords, FLOOR_DOOR_Z, W, H, floorW=1, floorH=1)
 
         # reshape door coord (x, y)
         door_coords[:, 1] = door_coords[:, 3]
         rs_door_coords = np.reshape(door_coords, (-1, 2))
-        door_xy = np_coor2xy(rs_door_coords, floor_door_z, W, H, floorW=1, floorH=1)
+        door_xy = np_coor2xy(rs_door_coords, FLOOR_DOOR_Z, W, H, floorW=1, floorH=1)
 
         # print('corner_coords', corner_coords)
         # print('door_coords', door_coords)
@@ -75,7 +77,7 @@ class Pano2FloorPlan():
             # print(project_point_on_line(door_l_xy, corner_r_xy, door_r_xy))
             # break
 
-        return corner_xy, door_xy
+        return door_xy
 
 
     def mapping_door_in_wall(self, door_coords, corner_coords, H, W):

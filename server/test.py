@@ -2,7 +2,7 @@ import os
 from PIL import Image
 import time
 
-from modules.room_layout_transfomer import Pano2FloorPlan
+from modules.pano2floorplan import Pano2FloorPlan
 
 
 if __name__ == '__main__':
