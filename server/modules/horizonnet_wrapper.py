@@ -4,7 +4,7 @@
 from pathlib import Path
 
 import sys
-sys.path.append(str(Path(__file__).parent.parent.parent) + '/modules/HorizonNet')
+sys.path.append(str(Path(__file__).parent.parent.parent) + '/third_party/HorizonNet')
 
 
 import os

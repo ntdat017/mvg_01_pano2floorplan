@@ -1,4 +1,3 @@
-
-[submodule "modules/HorizonNet"]
-	path = modules/HorizonNet
-    url = https://github.com/sunset1995/HorizonNet
+[submodule "third_party/HorizonNet"]
+	path = third_party/HorizonNet
+	url = https://github.com/sunset1995/HorizonNet
