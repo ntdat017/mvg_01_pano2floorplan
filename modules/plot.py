@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 
 
-from .utils import get_perpendicular_point
+from modules.utils import get_perpendicular_point
 
 # def plot_quater_circle(ax, a, b):
 #     k = np.linspace(0, np.pi/2, 100)

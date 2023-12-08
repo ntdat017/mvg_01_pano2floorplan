@@ -1,11 +1,5 @@
 
-# CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
-
 from pathlib import Path
-
-import sys
-sys.path.append(str(Path(__file__).parent.parent.parent) + '/third_party/HorizonNet')
-
 
 import os
 import json
@@ -14,12 +8,16 @@ import torch
 import numpy as np
 from PIL import Image
 
-from inference import inference, HorizonNet, utils
-from misc.pano_lsd_align import panoEdgeDetection, rotatePanorama
+from modules.HorizonNet.inference import inference, HorizonNet, utils
+from modules.HorizonNet.misc.pano_lsd_align import panoEdgeDetection, rotatePanorama
+
+
+CURRENT_DIR = Path(os.path.abspath(__file__)).parent.parent.parent.absolute()
+print(CURRENT_DIR)
 
 args = {
     'cpu': False,
-    'model_path': 'storage/resnet50_rnn__zind.pth',
+    'model_path': f'{CURRENT_DIR}/storage/resnet50_rnn__zind.pth',
     'flip': False,
     'rotate': [],
     'visualize': True,

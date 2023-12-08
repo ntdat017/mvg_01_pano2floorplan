@@ -1,13 +1,13 @@
 import numpy as np
 from PIL import Image
 
-from .horizonnet_wrapper import HorizonNetWrapper
-from .door_detector import DoorDetector
+from modules.HorizonNet import HorizonNetWrapper
+from modules.door_detector import DoorDetector
 
-from .utils import np_coorx2u, np_coor2xy, project_point_on_line, intersection_point_on_line, get_session_name, PI
-from .plot import plot_floor_plan
-from .bird_view import export_bird_view
-from .config import FLOOR_DOOR_Z
+from modules.utils import np_coorx2u, np_coor2xy, project_point_on_line, intersection_point_on_line, get_session_name, PI
+from modules.plot import plot_floor_plan
+from modules.bird_view import export_bird_view
+from modules.config import FLOOR_DOOR_Z
 
 
 class Pano2FloorPlan():

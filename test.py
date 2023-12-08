@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
     room = Pano2FloorPlan()
 
-    for i in range(4):
-        tt = time.time()
-        room.process(image_path, img_pil=image_pil, save_dir=save_dir)
-        print('time', time.time() - tt)
+    # for i in range(4):
+    tt = time.time()
+    room.process(image_path, img_pil=image_pil, save_dir=save_dir)
+    print('time', time.time() - tt)
